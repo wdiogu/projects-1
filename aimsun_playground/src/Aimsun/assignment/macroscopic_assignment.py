@@ -19,7 +19,7 @@ def main(argv):
         global model
         model = console.getModel()
         print("load campnou network")
-        print(dir(model))
+        print(model.areaName())
     else:
         console.getLog().addError("Cannot load the network")
         print("cannot load network")
