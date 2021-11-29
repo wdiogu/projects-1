@@ -10,15 +10,16 @@ def main(argv):
     overallStartTime = time.perf_counter()
     if len(argv) < 3:
         print("Incorrect Number of Arguments")
-        print("Arguments: -script script.py campnou_network.ang")
+        print("Arguments: -script script.py campnou_network.ang output_folder")
         return -1
     # Start a console
     console = ANGConsole()
     # Load a network
-    if console.open(argv[4]):
+    if console.open(argv[1]):
         global model
         model = console.getModel()
-        print("open campnou network")
+        print("load campnou network")
+        print(dir(model))
     else:
         console.getLog().addError("Cannot load the network")
         print("cannot load network")
