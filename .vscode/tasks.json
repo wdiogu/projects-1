@@ -8,7 +8,8 @@
             "type": "shell",
             "command": "aconsole.exe -script helloworld.py",
             "windows": {
-                "command": "\"C:\\Program Files\\Aimsun\\Aimsun Next 20\\aconsole.exe\" -script src\\Aimsun\\assignment\\macroscopic_assignment.py input_files\\aimsun_files\\campnou_network.ang"
+                // "command": "\"C:\\Program Files\\Aimsun\\Aimsun Next 20\\aconsole.exe\" -script src\\Aimsun\\assignment\\macroscopic_assignment.py input_files\\aimsun_files\\campnou_network.ang",
+                "command": "\"C:\\Program Files\\Aimsun\\Aimsun Next 20\\aconsole.exe\" -script tmg\\aimsun_playground\\src\\Aimsun\\assignment\\macroscopic_assignment.py tmg\\aimsun_playground\\input_files\\aimsun_files\\campnou_network.ang"
             },
             "group": "test",
             "presentation": {

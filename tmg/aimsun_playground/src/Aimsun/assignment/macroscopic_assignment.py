@@ -15,7 +15,7 @@ def main(argv):
     # Start a console
     console = ANGConsole()
     # Load a network
-    if console.open(argv[1]):
+    if console.open(argv[4]):
         global model
         model = console.getModel()
         print("open campnou network")
