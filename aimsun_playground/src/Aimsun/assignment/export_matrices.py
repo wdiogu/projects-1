@@ -50,7 +50,7 @@ def exportMatrix(file, matrix):
         )
     else:
         file.write("0 None\n")
-    file.write("%s\n" % matrix.getFrom().toString(Qt.ISODate))
+    file.write("%s\n" % matrix.getFrom().toString())
     file.write("%s\n" % matrix.getDuration().toString())
     for origin in centroids:
         for destination in centroids:
