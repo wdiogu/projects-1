@@ -1,6 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\aimsun_playground",
+    "\\aimsun_playground\\input_files",
+    "\\aimsun_playground\\src",
+    "\\aimsun_playground\\src\\Aimsun",
+    "\\aimsun_playground\\src\\Aimsun\\assignment"
   ],
+  "SelectedNode": "\\aimsun_playground\\src\\Aimsun\\assignment\\macroscopic_assignment.py",
   "PreviewInSolutionExplorer": false
 }

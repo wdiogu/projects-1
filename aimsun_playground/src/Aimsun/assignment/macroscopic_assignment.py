@@ -62,7 +62,7 @@ def save(console, model):
     model.getCommander().addCommand( None )
     print ("Network saved Successfully")
 
-def userClass(model, console,  catalog, geomodel):
+def create_and_read_custom_attribute(model, console,  catalog, geomodel):
     #in C interop reference to logic underhood in C of GKuserclass
     #to deal with taht refelction is via string compariosn and returns a 
     #proxy object and proxy boject to get to c object itself 
@@ -74,24 +74,29 @@ def userClass(model, console,  catalog, geomodel):
     #actual data is stored in C all python level references to have API calls to understand to C object
     user_classes = catalog.getObjectsByType( user_class_type )
 
-    print (user_classes)
-    print (dir(user_classes))
+    # #add a new column of a custom attribute
+    addColumn(user_class_type, ["GKUserClass::value_of_time_python", "value_of_time_python", GKColumn.Double, GKColumn.eExternal])
+    addColumn(user_class_type, ["GKUserClass::value_of_time2_python", "value_of_time2_python", GKColumn.Double, GKColumn.eExternal])
+
 
     for x in user_classes:
         print (x, user_classes[x].getName())
 
     attributes  = user_class_type.getColumns( GKType.eSearchOnlyThisType )
     for x in attributes:
-        if x.getExternalName() == "value_of_time":
+        if x.getExternalName() == "value_of_time_python":
             for user_class in user_classes:
-                if user_class == 1043: 
-                    value_of_time = user_classes[user_class].getDataValueDouble(x)
-                    print (value_of_time)
+                if user_classes[user_class].getName() == "Car":
+                    print (dir(user_classes[user_class]))
+                    user_classes[user_class].setDataValueDouble(x, 235.34)
+                elif user_classes[user_class].getName() == "Truck":
+                    print (dir(user_classes[user_class]))
+                    user_classes[user_class].setDataValueDouble(x, 345.45)
+                elif user_classes[user_class].getName() == "Bus":
+                    print (dir(user_classes[user_class]))
+                    user_classes[user_class].setDataValueDouble(x, 678.678)
             break
-
-    # #add a new column
-    #addColumn(userClassType, ["GKUserClass::value_of_time_python", "value_of_time_python", GKColumn.Double, GKColumn.eExternal])
-    #addColumn(userClassType, ["GKUserClass::value_of_time2_python", "value_of_time2_python", GKColumn.Double, GKColumn.eExternal])
+   
     #save the model 
     save(console, model)
     
@@ -109,7 +114,7 @@ def main(argv):
     print ('argv: ', argv)
     # generate a model of the input network
     model, catalog, geomodel = loadModel(Network, console)
-    userClass(model, console, catalog, geomodel)
+    create_and_read_custom_attribute(model, console, catalog, geomodel)
 
     overallEndTime = time.perf_counter()
     print(f"Overall Runtime: {overallEndTime-overallStartTime}s")
