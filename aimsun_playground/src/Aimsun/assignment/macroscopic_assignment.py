@@ -4,7 +4,7 @@ from PyANGBasic import *
 from PyANGKernel import *
 from PyANGConsole import *
 import shlex
-
+import inspect
 
 
 
@@ -53,10 +53,8 @@ def loadModel(filepath, console):
     return model, catalog, geomodel
 
 def addColumn(userClassType, arg_list):
-    #userClassType.addColumn( "GKUserClass::value_of_time_python", "value_of_time_python", GKColumn.Double, GKColumn.eExternal ) 
     userClassType.addColumn( arg_list[0], arg_list[1], arg_list[2] ) 
-    print ('external was built')
-    #return userClassType
+    print ('columns were successfully added')
 
 def save(console, model):
     console.save("C:\\Users\\sandhela\\source\\repos\\williamsProject1\\aimsun_playground\\input_files\\aimsun_files\\test2.ang")
@@ -65,112 +63,38 @@ def save(console, model):
     print ("Network saved Successfully")
 
 def userClass(model, console,  catalog, geomodel):
-    sectionType = model.getType("GKSection")
-    userClassType = model.getType("GKUserClass")
-    print (sectionType)
-    print (dir(sectionType))
-    print (dir(userClassType))
-    print (userClassType.getName())
-    cols = userClassType.getColumns( GKType.eSearchOnlyThisType )
-    #print (cols)
-    for item in cols:
-        print (item, item.getName(), item.getId(), item.getExternalName(), str(item.getColumnType()))
-    #print (dir(item))
+    #in C interop reference to logic underhood in C of GKuserclass
+    #to deal with taht refelction is via string compariosn and returns a 
+    #proxy object and proxy boject to get to c object itself 
 
-    #add a new column
-    addColumn(userClassType, ["GKUserClass::value_of_time_python", "value_of_time_python", GKColumn.Double, GKColumn.eExternal])
-    addColumn(userClassType, ["GKUserClass::value_of_time2_python", "value_of_time2_python", GKColumn.Double, GKColumn.eExternal])
-    
+    #getTYpe() returns an reference to c object type 
+    user_class_type = model.getType("GKUserClass")
+    #getobjects by type by proxy returns a map of the reference proxy objects 
+    #python ojbcts c objects represtns everything here done by proxy
+    #actual data is stored in C all python level references to have API calls to understand to C object
+    user_classes = catalog.getObjectsByType( user_class_type )
+
+    print (user_classes)
+    print (dir(user_classes))
+
+    for x in user_classes:
+        print (x, user_classes[x].getName())
+
+    attributes  = user_class_type.getColumns( GKType.eSearchOnlyThisType )
+    for x in attributes:
+        if x.getExternalName() == "value_of_time":
+            for user_class in user_classes:
+                if user_class == 1043: 
+                    value_of_time = user_classes[user_class].getDataValueDouble(x)
+                    print (value_of_time)
+            break
+
+    # #add a new column
+    #addColumn(userClassType, ["GKUserClass::value_of_time_python", "value_of_time_python", GKColumn.Double, GKColumn.eExternal])
+    #addColumn(userClassType, ["GKUserClass::value_of_time2_python", "value_of_time2_python", GKColumn.Double, GKColumn.eExternal])
     #save the model 
     save(console, model)
     
-
-    # attributes  = uc.getColumns( GKType.eSearchOnlyThisType )
-    # for item in attributes:
-    #     print (item, item.getName())
-
-    #system = GKSystem.getSystem()
-    #g_object = model.getType("GKObject")
-    #print (g_object, g_object.getName())
-    #print (dir(g_object))
-    #ans = model.getCatalog().getObjectsByType(model.getType("GKUserClass"))
-    #print (ans)
-    #print (dir(ans[1043]))
-    #attributes  = sectionType.getColumns( GKType.eSearchOnlyThisType )
-
-
-
-    #user_class = model.getType("GKUserClass")
-    #print (dir(catalog))
-    
-    #valueoftime = user_class.value_of_time()
-    #print (valueoftime)
-
-    # user_class_object = catalog.getObjectsByTypeWithSubTypes(user_class) #getObjectsByType(user_class)
-    # print (user_class_object)
-    # for item in user_class_object:
-    #      print (item, item.getName() ) #user_class_object[item].getName())
-    # print(dir(item))
-
-    #print (dir(user_class_object[item]))
-    #vehicle = model.userClass.getVehicle()
-    # context = model.getType("GKFunctionCostContext")
-    # print (str(context))
-    # dta = model.getType("DTAManager")
-    # print (dta)
-    # print (dir(dta))
-    
-    #GKUserClass
-
-    #print (dir(system))
-    
-    #AKIGetSectionUserDefinedCost()
-    #AKIVehGetNbVehTypes
-    
-    #context is a GKFunctionCostContext python object. 
-    #manager is a DTAManager python object. 
-    #section is a DTASection python object. 
-
-  
-    #userClass = model.getType( "GKUserClass")
-    #print (userClass)
-    #print (dir(catalog))
-    #print (dir(userClass))
-    #this is a list of all userClass objects but this doesn't access the attributes as 
-    #cleanly as we would like
-    #userClassCatalog = catalog.getUsedSubTypesFromType(userClass)
-    #userClassDict = userClassCatalog[0]
-    #print ('userclassdict ', userClassDict)
-    #for item in userClassDict:
-    #    print (item, userClassDict[item].getName())
-    #print (dir(userClassDict[item]))
-
-    #to access the attributes of this class this outputs a huge list of pyangkernel objects
-    # attributes  = userClass.getColumns( GKType.eSearchOnlyThisType )
-    # #print ('attribures ', attributes)
-    # #we need to iterate over it no choice to find the attribute of interest 
-    # for item in attributes:
-    #     print (item, item.getName())
-    #     if item.getExternalName() == "value_of_time":
-    #         #print ('yes')
-    #         # print (item)
-    #         # print (dir(item))
-    #         # print (item.getContents())
-    #         # print (item.getName())
-    #         #xxx = userClass.getDataValueDouble(item)
-    #         #print (xxx)
-    #         break
-
-            
-    #for x in attributes:
-    #    print (x, str(x.getName()), str(x.getExternalName()) )
-    #print (dir(x))
-    #     if x.getExternalName() == "value_of_time":
-    #         value_of_time = context.userClass.getDataValueDouble(x)
-    #         break
-
-    
-
 # Main script to complete the full netowrk import
 def main(argv):
     overallStartTime = time.perf_counter()
@@ -189,22 +113,6 @@ def main(argv):
 
     overallEndTime = time.perf_counter()
     print(f"Overall Runtime: {overallEndTime-overallStartTime}s")
-    # Reset the Aimsun undo buffer
-    #model.getCommander().addCommand(None)
-    #return 0
-
 
 if __name__ == "__main__":
     main(sys.argv)
-
-
-    # Load a network
-    # if console.open(argv[1]):
-    #     global model
-    #     model = console.getModel()
-    #     print("load campnou network")
-    #     print(model.areaName())
-    # else:
-    #     console.getLog().addError("Cannot load the network")
-    #     print("cannot load network")
-    #     return -1
