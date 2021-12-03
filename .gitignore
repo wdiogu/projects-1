@@ -1,0 +1,7 @@
+.vscode
+aimsun_playground\input_files
+aimsun_playground\output_files
+aimsun_playground/src/Aimsun/assignment/calculation.ipynb
+aimsun_playground/output_files/aimsun_files/test_network_output.ang.lck
+aimsun_playground/output_files/aimsun_files/test_network_output.ang
+aimsun_playground/input_files/aimsun_files/campnou_network.ang
