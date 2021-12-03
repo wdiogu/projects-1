@@ -99,7 +99,48 @@ def create_and_read_custom_attribute(model, console,  catalog, geomodel):
    
     #save the model 
     save(console, model)
-    
+
+def read_vdf_functions(console, model, catalog):
+    """attempt to read the vdfs in a given pre-existing network by looping over the function folder"""
+    print('hello')
+    #getTYpe() returns an reference to c object type 
+    classtype_function_cost = model.getType("GKFunctionCost")
+    dict_catalog_function_cost = catalog.getObjectsByType( classtype_function_cost )
+    for item in dict_catalog_function_cost:
+        val = dict_catalog_function_cost[item]
+        #print (item, dict_catalog_function_cost[item].getName(), val.getFunctionType(), val.getLanguage(), val.getDefinition() )
+    print (dir(dict_catalog_function_cost[item]))
+
+fun_test = """
+def hello_world():
+    print("hello world")
+"""
+def edit_existing_vdf_functions(console, model, catalog):
+    """attempt to edit an existing vdf function in the network heer we can create a new python function"""
+    print('hello')
+    #getTYpe() returns an reference to c object type 
+    classtype_function_cost = model.getType("GKFunctionCost")
+    dict_catalog_function_cost = catalog.getObjectsByType( classtype_function_cost )
+    for item in dict_catalog_function_cost:
+        if item == 2826:
+            function_of_interest = dict_catalog_function_cost[item]
+            function_of_interest.setFunctionType(4)
+            function_of_interest.setDefinition(fun_test)
+
+
+def edit_existing_vdf_functions(console, model, catalog):
+    """attempt to create a new vdf function"""
+    print('hello')
+    #getTYpe() returns an reference to c object type 
+    classtype_function_cost = model.getType("GKFunctionCost")
+    dict_catalog_function_cost = catalog.getObjectsByType( classtype_function_cost )
+    for item in dict_catalog_function_cost:
+        if item == 2826:
+            function_of_interest = dict_catalog_function_cost[item]
+            function_of_interest.setFunctionType(4)
+            function_of_interest.setDefinition(fun_test)
+                  
+
 # Main script to complete the full netowrk import
 def main(argv):
     overallStartTime = time.perf_counter()
@@ -114,7 +155,10 @@ def main(argv):
     print ('argv: ', argv)
     # generate a model of the input network
     model, catalog, geomodel = loadModel(Network, console)
-    create_and_read_custom_attribute(model, console, catalog, geomodel)
+    #create_and_read_custom_attribute(model, console, catalog, geomodel)
+    read_vdf_functions(console, model, catalog)
+    edit_existing_vdf_functions(console, model, catalog)
+    save(console, model)
 
     overallEndTime = time.perf_counter()
     print(f"Overall Runtime: {overallEndTime-overallStartTime}s")
