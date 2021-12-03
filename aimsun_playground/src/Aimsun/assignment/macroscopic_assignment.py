@@ -128,18 +128,23 @@ def edit_existing_vdf_functions(console, model, catalog):
             function_of_interest.setDefinition(fun_test)
 
 
-def edit_existing_vdf_functions(console, model, catalog):
+def create_new_functions(console, model, catalog):
     """attempt to create a new vdf function"""
     print('hello')
-    #getTYpe() returns an reference to c object type 
     classtype_function_cost = model.getType("GKFunctionCost")
     dict_catalog_function_cost = catalog.getObjectsByType( classtype_function_cost )
+    #print (dir(classtype_function_cost))
+
+    #add a new column function
+    #classtype_function_cost.addColumn("GKFunctionComponent::PythonFunction", "PythonFunction", GKColumn.Double, GKColumn.eExternal)
+
     for item in dict_catalog_function_cost:
-        if item == 2826:
-            function_of_interest = dict_catalog_function_cost[item]
-            function_of_interest.setFunctionType(4)
-            function_of_interest.setDefinition(fun_test)
-                  
+        val = dict_catalog_function_cost[item]
+        #print (item, dict_catalog_function_cost[item].getName(), val.getFunctionType(), val.getLanguage(), val.getDefinition() )
+    print (dir(val))
+
+    #addColumn(user_class_type, ["GKUserClass::value_of_time2_python", "value_of_time2_python", GKColumn.Double, GKColumn.eExternal])
+
 
 # Main script to complete the full netowrk import
 def main(argv):
@@ -156,8 +161,9 @@ def main(argv):
     # generate a model of the input network
     model, catalog, geomodel = loadModel(Network, console)
     #create_and_read_custom_attribute(model, console, catalog, geomodel)
-    read_vdf_functions(console, model, catalog)
-    edit_existing_vdf_functions(console, model, catalog)
+    #read_vdf_functions(console, model, catalog)
+    #edit_existing_vdf_functions(console, model, catalog)
+    create_new_functions(console, model, catalog)
     save(console, model)
 
     overallEndTime = time.perf_counter()
