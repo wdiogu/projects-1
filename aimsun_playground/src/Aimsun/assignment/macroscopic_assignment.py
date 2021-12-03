@@ -4,7 +4,6 @@ from PyANGBasic import *
 from PyANGKernel import *
 from PyANGConsole import *
 import shlex
-import PySide6
 
 # Main script to complete the full netowrk import
 def main(argv):
@@ -24,11 +23,8 @@ def main(argv):
         console.getLog().addError("Cannot load the network")
         print("cannot load network")
         return -1
-
-    print(model.getCatalog().find(956).getTypeName())
-
-    print(model.getCatalog().find(956).isA("GKCentroidConfiguration"))
-    print(PySide6.Qtcore.Qt.ISOdate)
+    centroids = matrix.getCentroidConfiguration().getCentroidsInOrder()
+    print(centroids)
 
     # Reset the Aimsun undo buffer
     # model.getCommander().addCommand(None)
@@ -41,6 +37,7 @@ def create_scenario():
     read path assignment plan
     read master control plan
     """
+    pass
 
 
 def create_experiment():
