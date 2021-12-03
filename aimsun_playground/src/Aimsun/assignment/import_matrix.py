@@ -4,9 +4,12 @@ from PyANGBasic import *
 from PyANGKernel import *
 from PyANGConsole import *
 import shlex
+import datetime
+
+# from PySide6 import QtCore
 
 
-# Main script to complete the full netowrk impsort
+# Main script to complete the full netowrk import
 overallStartTime = time.perf_counter()
 
 
@@ -24,9 +27,10 @@ def main(argv):
 
     # Start the model
     model = console.getModel()
+    target = model.getCatalog().find(956)
 
     # Export the matrices
-    _execute(model, argv, console)
+    _execute(console, model, argv, target)
 
 
 def load_network(console, network_file):
@@ -71,11 +75,15 @@ def importMatrix(fileName, centroidConf, model):
             elif state == 2:
                 state = 3
                 # From Time
-                matrix.setFrom(QTime.fromString(line, Qt.ISODate))
+                matrix.setFrom(datetime.datetime.strptime(line, "%H:%M:%S").time())
+                # matrix.setFrom().fromString(line)
+
             elif state == 3:
                 state = 4
                 # Duration
+                # matrix.setDuration(GKTimeDuration.fromString(line))
                 matrix.setDuration(GKTimeDuration.fromString(line))
+
             elif state == 4:
                 # Trips
                 tokens = line.split(" ")
@@ -93,7 +101,7 @@ def importMatrix(fileName, centroidConf, model):
     matrix.setStatus(GKObject.eModified)
 
 
-def _execute(model, argv, target):
+def _execute(console, model, argv, target):
     matrixFilePath = argv[2]
     # Import matrices. Set the right ID before using this script.
     if target != None:
@@ -106,6 +114,19 @@ def _execute(model, argv, target):
             "Import Matrices",
             "The script must be launched from a Centroid Configuration context menu",
         )
+
+    save(console, model, argv)
+
+
+def save(console, model, argv):
+
+    console.save(argv[3])
+
+    # Reset the Aimsun undo buffer
+
+    model.getCommander().addCommand(None)
+
+    print("Network saved Successfully")
 
 
 if __name__ == "__main__":
